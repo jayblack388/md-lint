@@ -1,0 +1,87 @@
+{
+  "name": "md-lint",
+  "displayName": "Markdown Lint",
+  "description": "Lint Markdown files with markdownlint - real-time diagnostics and auto-fix",
+  "version": "0.1.0",
+  "icon": "images/icon.png",
+  "publisher": "jayblack388",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.74.0",
+    "node": ">=18.0.0"
+  },
+  "categories": ["Linters"],
+  "keywords": [
+    "markdown",
+    "lint",
+    "markdownlint",
+    "linter"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jayblack388/md-lint"
+  },
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onLanguage:markdown",
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "md-lint.fixAll",
+        "title": "Fix All Markdown Lint Issues",
+        "category": "Markdown Lint"
+      },
+      {
+        "command": "md-lint.lint",
+        "title": "Lint Current File",
+        "category": "Markdown Lint"
+      }
+    ],
+    "configuration": {
+      "title": "Markdown Lint",
+      "properties": {
+        "md-lint.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable Markdown linting"
+        },
+        "md-lint.fixOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically fix lint issues on save"
+        },
+        "md-lint.config": {
+          "type": "object",
+          "default": {},
+          "description": "Markdownlint configuration (overrides .markdownlint.json)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
+    "watch": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --watch",
+    "package": "yarn compile && vsce package --no-yarn",
+    "commit": "cz"
+  },
+  "dependencies": {
+    "markdownlint": "^0.32.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.74.0",
+    "@vscode/vsce": "^2.22.0",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "esbuild": "^0.19.0",
+    "ovsx": "^0.8.0",
+    "typescript": "^5.0.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
