@@ -2,7 +2,7 @@
   "name": "md-lint",
   "displayName": "Markdown Lint",
   "description": "Lint Markdown files with markdownlint - real-time diagnostics and auto-fix",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "icon": "images/icon.png",
   "publisher": "jayblack388",
   "license": "MIT",
@@ -10,7 +10,9 @@
     "vscode": "^1.74.0",
     "node": ">=18.0.0"
   },
-  "categories": ["Linters"],
+  "categories": [
+    "Linters"
+  ],
   "keywords": [
     "markdown",
     "lint",
