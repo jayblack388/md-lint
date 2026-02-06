@@ -47,17 +47,75 @@
         "md-lint.enable": {
           "type": "boolean",
           "default": true,
-          "description": "Enable/disable Markdown linting"
+          "description": "Enable or disable Markdown linting. When false, no diagnostics are shown."
         },
         "md-lint.fixOnSave": {
           "type": "boolean",
           "default": false,
-          "description": "Automatically fix lint issues on save"
+          "description": "When enabled, automatically apply fixable fixes when you save a Markdown file."
         },
         "md-lint.config": {
           "type": "object",
           "default": {},
-          "description": "Markdownlint configuration (overrides .markdownlint.json)"
+          "description": "Markdownlint rule overrides. Set to false to disable a rule, true to enable, or an options object (e.g. line_length for MD013). Overrides .markdownlint.json when set.",
+          "additionalProperties": {
+            "oneOf": [
+              { "type": "boolean" },
+              { "type": "number" },
+              { "type": "object" }
+            ]
+          },
+          "properties": {
+            "default": { "type": "boolean", "description": "Enable all rules by default when true." },
+            "MD001": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Heading levels should only increment by one level at a time" },
+            "MD003": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Heading style" },
+            "MD004": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Unordered list style" },
+            "MD005": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Inconsistent indentation for list items at the same level" },
+            "MD007": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Unordered list indentation" },
+            "MD009": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Trailing spaces" },
+            "MD010": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Hard tabs" },
+            "MD011": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Reversed link syntax" },
+            "MD012": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Multiple consecutive blank lines" },
+            "MD013": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Line length" },
+            "MD014": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Dollar signs used before commands without showing output" },
+            "MD018": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "No space after hash on atx style heading" },
+            "MD019": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Multiple spaces after hash on atx style heading" },
+            "MD020": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "No space inside hashes on closed atx style heading" },
+            "MD021": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Multiple spaces inside hashes on closed atx style heading" },
+            "MD022": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Headings should be surrounded by blank lines" },
+            "MD023": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Headings must start at the beginning of the line" },
+            "MD024": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Multiple headings with the same content" },
+            "MD025": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Multiple top-level headings in the same document" },
+            "MD026": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Trailing punctuation in heading" },
+            "MD027": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Multiple spaces after blockquote symbol" },
+            "MD028": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Blank line inside blockquote" },
+            "MD029": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Ordered list item prefix" },
+            "MD030": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Spaces after list markers" },
+            "MD031": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Fenced code blocks should be surrounded by blank lines" },
+            "MD032": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Lists should be surrounded by blank lines" },
+            "MD033": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Inline HTML" },
+            "MD034": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Bare URL used" },
+            "MD035": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Horizontal rule style" },
+            "MD036": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Emphasis used instead of a heading" },
+            "MD037": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Spaces inside emphasis markers" },
+            "MD038": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Spaces inside code span elements" },
+            "MD039": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Spaces inside link text" },
+            "MD040": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Fenced code blocks should have a language specified" },
+            "MD041": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "First line in a file should be a top-level heading" },
+            "MD042": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "No empty links" },
+            "MD043": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Required heading structure" },
+            "MD044": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Proper names should have the correct capitalization" },
+            "MD045": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Images should have alternate text (alt text)" },
+            "MD046": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Code block style" },
+            "MD047": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Files should end with a single newline character" },
+            "MD048": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Code fence style" },
+            "MD049": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Emphasis style" },
+            "MD050": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Strong style" },
+            "MD051": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Link fragments should be valid" },
+            "MD052": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Reference links and images should use a label that is defined" },
+            "MD053": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Link and image reference definitions should be needed" },
+            "MD054": { "oneOf": [{ "type": "boolean" }, { "type": "object" }], "description": "Link and image style" }
+          }
         }
       }
     }

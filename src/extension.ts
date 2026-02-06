@@ -2,7 +2,20 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 
-// Types for markdownlint
+/** Extension settings (md-lint.*). Matches package.json contributes.configuration. */
+export interface MdLintExtensionSettings {
+  /** Enable or disable Markdown linting. */
+  enable: boolean;
+  /** Automatically fix fixable issues when saving a Markdown file. */
+  fixOnSave: boolean;
+  /** Markdownlint rule overrides. Merged with default config; keys are rule IDs (e.g. MD013), values are false to disable or an options object. */
+  config: MarkdownlintRuleConfig;
+}
+
+/** Per-rule config: false to disable, or true / options object to enable (with optional options). */
+export type MarkdownlintRuleConfig = { [ruleId: string]: boolean | number | Record<string, unknown> };
+
+// Types for markdownlint (internal)
 type Configuration = { [rule: string]: unknown };
 type LintError = {
   lineNumber: number;
@@ -29,6 +42,15 @@ function getMarkdownlint(): any {
 
 const DIAGNOSTIC_SOURCE = 'md-lint';
 let diagnosticCollection: vscode.DiagnosticCollection;
+
+function getExtensionSettings(): MdLintExtensionSettings {
+  const config = vscode.workspace.getConfiguration('md-lint');
+  return {
+    enable: config.get<boolean>('enable', true),
+    fixOnSave: config.get<boolean>('fixOnSave', false),
+    config: config.get<MarkdownlintRuleConfig>('config', {}),
+  };
+}
 
 export function activate(context: vscode.ExtensionContext) {
   try {
@@ -63,8 +85,8 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
       vscode.workspace.onDidSaveTextDocument(async (document) => {
         if (document.languageId === 'markdown') {
-          const config = vscode.workspace.getConfiguration('md-lint');
-          if (config.get('fixOnSave', false)) {
+          const { fixOnSave } = getExtensionSettings();
+          if (fixOnSave) {
             await fixAllInDocument(document);
           }
           lintDocument(document);
@@ -192,8 +214,7 @@ function getConfig(documentUri: vscode.Uri): Configuration {
 }
 
 function lintDocument(document: vscode.TextDocument) {
-  const config = vscode.workspace.getConfiguration('md-lint');
-  if (!config.get('enable', true)) {
+  if (!getExtensionSettings().enable) {
     diagnosticCollection.delete(document.uri);
     return;
   }
