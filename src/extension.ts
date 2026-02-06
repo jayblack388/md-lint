@@ -79,6 +79,19 @@ export function activate(context: vscode.ExtensionContext) {
       })
     );
 
+    // Re-lint when md-lint settings change (no reload needed)
+    context.subscriptions.push(
+      vscode.workspace.onDidChangeConfiguration((event) => {
+        if (event.affectsConfiguration('md-lint')) {
+          vscode.workspace.textDocuments.forEach((document) => {
+            if (document.languageId === 'markdown') {
+              lintDocument(document);
+            }
+          });
+        }
+      })
+    );
+
     // Fix All command
     context.subscriptions.push(
       vscode.commands.registerCommand('md-lint.fixAll', async () => {
@@ -138,13 +151,18 @@ export function activate(context: vscode.ExtensionContext) {
   }
 }
 
+const DEFAULT_CONFIG: Configuration = { default: true };
+
 function getConfig(documentUri: vscode.Uri): Configuration {
   const config = vscode.workspace.getConfiguration('md-lint');
-  
-  // Check for settings config first
   const settingsConfig = config.get<Configuration>('config');
-  if (settingsConfig && Object.keys(settingsConfig).length > 0) {
-    return settingsConfig;
+
+  // Settings override: merge with default so partial configs (e.g. only MD013: false) work
+  if (settingsConfig && typeof settingsConfig === 'object') {
+    const keys = Object.keys(settingsConfig);
+    if (keys.length > 0) {
+      return { ...DEFAULT_CONFIG, ...settingsConfig };
+    }
   }
 
   // Look for .markdownlint.json in workspace
@@ -170,10 +188,7 @@ function getConfig(documentUri: vscode.Uri): Configuration {
     }
   }
 
-  // Return default config with common rules enabled
-  return {
-    "default": true  // Enable all rules by default
-  };
+  return { ...DEFAULT_CONFIG };
 }
 
 function lintDocument(document: vscode.TextDocument) {
